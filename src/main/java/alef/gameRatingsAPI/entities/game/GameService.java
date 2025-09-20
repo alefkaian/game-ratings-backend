@@ -32,20 +32,6 @@ public class GameService {
         this.genreService = genreService;
     }
 
-    /*public Mono<Void> fetchAndRefreshAllGames(String initialUrl) {
-        return apiClient.fetchGamesPage(initialUrl, 40)
-                .publishOn(Schedulers.boundedElastic())
-                .flatMap(response -> {
-                    saveAndUpdateGames(response.results());
-
-                    // só chama recursivamente se houver next
-                    if (response.next() != null) {
-                        return fetchAndRefreshAllGames(response.next());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }*/
     public void fetchAndRefreshAllGames(String initialUrl) {
         Mono.fromRunnable(() -> {
             String currentUrl = initialUrl;
@@ -54,22 +40,14 @@ public class GameService {
                 try {
                     System.out.println("\nCounter: " + counter);
                     counter++;
-                    // A chamada reativa da API é bloqueada aqui,
-                    // garantindo que a resposta chegue antes de prosseguir.
                     ExternalGamesResponseDTO response = apiClient.fetchGamesPage(currentUrl, 40).block();
-
-                    // Valida a resposta antes de processar
                     if (Objects.nonNull(response) && Objects.nonNull(response.results())) {
                         saveAndUpdateGames(response.results());
                     }
-
-                    // A iteração só para quando a URL da próxima página for nula
                     if (Objects.isNull(response) || Objects.isNull(response.next())) {
                         break;
                     }
-
                     currentUrl = response.next();
-
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     System.out.println("Sync interrupted.");
@@ -79,7 +57,7 @@ public class GameService {
                     break;
                 }
             }
-        }).subscribeOn(Schedulers.boundedElastic()).subscribe(); // Executa a lógica em uma thread dedicada
+        }).subscribeOn(Schedulers.boundedElastic()).subscribe();
     }
 
 

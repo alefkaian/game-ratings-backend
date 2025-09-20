@@ -20,7 +20,7 @@ public class ExternalApiClient {
 
     public Mono<ExternalGamesResponseDTO> fetchGamesPage(String nextUrl, int pageSize) {
         String uri = (nextUrl != null) ? nextUrl : "/games?key=" + apiKey + "&ordering=-rating&page_size=" + pageSize;
-        System.out.println("[FETCH CHAMADO]");
+        System.out.println("[Fetch Called]");
         return webClient.get()
                 .uri(uri)
                 .retrieve()
