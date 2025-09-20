@@ -7,11 +7,9 @@ import alef.gameRatingsAPI.entities.genre.GenreService;
 import alef.gameRatingsAPI.entities.platform.Platform;
 import alef.gameRatingsAPI.entities.platform.PlatformService;
 import alef.gameRatingsAPI.shared.external.ExternalApiClient;
-import ch.qos.logback.core.encoder.EchoEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
@@ -116,7 +114,7 @@ public class GameService {
 
     public void testSingleFetch(String initialUrl) {
         System.out.println("----------------------------------------------------");
-        apiClient.fetchGamesPage(null, 40)
+        apiClient.fetchGamesPage(initialUrl, 40)
                 .subscribe(response -> {
                             System.out.println("Response received");
                             System.out.println("Count: " + response.count());

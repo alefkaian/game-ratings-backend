@@ -5,11 +5,12 @@ import alef.gameRatingsAPI.entities.genre.Genre;
 import alef.gameRatingsAPI.entities.platform.Platform;
 import alef.gameRatingsAPI.entities.publisher.Publisher;
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.cglib.core.Local;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.Set;
 
 @Entity

@@ -2,7 +2,6 @@ package alef.gameRatingsAPI.entities.game;
 
 import alef.gameRatingsAPI.entities.esrbRating.EsrbRatingDTO;
 import alef.gameRatingsAPI.entities.genre.GenreDTO;
-import alef.gameRatingsAPI.entities.platform.PlatformDTO;
 import alef.gameRatingsAPI.entities.platform.PlatformWrapperDTO;
 
 import java.time.LocalDate;
