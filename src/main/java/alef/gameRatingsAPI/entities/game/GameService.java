@@ -44,7 +44,7 @@ public class GameService {
             "card",
             "educational"
     );
-    ;
+
 
     public GameService(ExternalApiClient apiClient,
                        GameRepository gameRepository,
@@ -124,7 +124,7 @@ public class GameService {
     }
 
 
-    public void testSingleFetch(String initialUrl) {
+    public void testSingleFetch() {
         System.out.println(
                 "----------------------------------------------------");
         apiClient.fetchGamesPage(null, null, null, null).subscribe(response -> {
@@ -137,9 +137,7 @@ public class GameService {
             long gamesWithSlug =
                     response.results().stream().filter(game -> Objects.nonNull(game.slug())).count();
             System.out.println("Games with slug: " + gamesWithSlug);
-        }, error -> {
-            System.err.println("Request error: " + error.getMessage());
-        });
+        }, error -> System.err.println("Request error: " + error.getMessage()));
         System.out.println("Continue");
     }
 }

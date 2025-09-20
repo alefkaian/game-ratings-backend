@@ -1,15 +1,12 @@
 package alef.gameRatingsAPI.shared.external;
 
 import alef.gameRatingsAPI.entities.game.ExternalGamesResponseDTO;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 @Service
