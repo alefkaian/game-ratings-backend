@@ -1,0 +1,33 @@
+package alef.gameRatingsAPI.entities.genre;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Service
+public class GenreService {
+    private final GenreRepository genreRepository;
+
+    public GenreService(GenreRepository genreRepository) {
+        this.genreRepository = genreRepository;
+    }
+
+    @Transactional
+    public Genre getGenre(GenreDTO genreInfo) {
+        if (genreInfo == null) return null;
+
+        return genreRepository.findById(genreInfo.id()).orElseGet(() -> {
+            Genre genre = new Genre(genreInfo.id(), genreInfo.slug(), genreInfo.name(), genreInfo.image_background());
+            return genreRepository.save(genre);
+        });
+    }
+
+    public Set<Genre> getGenresList(List<GenreDTO> genreInfo) {
+        return genreInfo.stream()
+                .map(this::getGenre)
+                .collect(Collectors.toSet());
+    }
+}
