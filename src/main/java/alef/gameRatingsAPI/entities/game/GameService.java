@@ -23,8 +23,34 @@ public class GameService {
     private final EsrbRatingService esrbRatingService;
     private final PlatformService platformService;
     private final GenreService genreService;
+    private static final List<String> GENRE_SLUGS = List.of(
+            "action",
+            "indie",
+            "adventure",
+            "role-playing-games-rpg",
+            "strategy",
+            "shooter",
+            "casual",
+            "simulation",
+            "puzzle",
+            "arcade",
+            "platformer",
+            "massively-multiplayer",
+            "racing",
+            "sports",
+            "fighting",
+            "family",
+            "board-games",
+            "card",
+            "educational"
+    );
+    ;
 
-    public GameService(ExternalApiClient apiClient, GameRepository gameRepository, EsrbRatingService esrbRatingService, PlatformService platformService, GenreService genreService) {
+    public GameService(ExternalApiClient apiClient,
+                       GameRepository gameRepository,
+                       EsrbRatingService esrbRatingService,
+                       PlatformService platformService,
+                       GenreService genreService) {
         this.apiClient = apiClient;
         this.gameRepository = gameRepository;
         this.esrbRatingService = esrbRatingService;
@@ -32,31 +58,36 @@ public class GameService {
         this.genreService = genreService;
     }
 
-    public void fetchAndRefreshAllGames(String initialUrl) {
+    public void fetchAndResyncAllGames(int maxPages) {
         Mono.fromRunnable(() -> {
-            String currentUrl = initialUrl;
-            int counter = 0;
-            while (true) {
-                try {
-                    System.out.println("\nCounter: " + counter);
-                    counter++;
-                    ExternalGamesResponseDTO response = apiClient.fetchGamesPage(currentUrl, 40).block();
-                    if (Objects.nonNull(response) && Objects.nonNull(response.results())) {
-                        saveAndUpdateGames(response.results());
-                    }
-                    if (Objects.isNull(response) || Objects.isNull(response.next())) {
+            int currentPage;
+            for (String genre : GENRE_SLUGS) {
+                currentPage = 1;
+                System.out.println("\nFetching from genre: " + genre);
+                while (currentPage <= maxPages) {
+                    try {
+                        System.out.println("\nCurrent page: " + currentPage);
+                        ExternalGamesResponseDTO response =
+                                apiClient.fetchGamesPage(Set.of(genre), 40,
+                                        currentPage, "-metacritic").block();
+                        if (Objects.nonNull(response) && Objects.nonNull(response.results())) {
+                            saveAndUpdateGames(response.results());
+                        }
+                        if (Objects.isNull(response) || Objects.isNull(response.next())) {
+                            break;
+                        }
+                        currentPage++;
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        System.out.println("Sync interrupted.");
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Error during sync: " + e.getMessage());
                         break;
                     }
-                    currentUrl = response.next();
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    System.out.println("Sync interrupted.");
-                    break;
-                } catch (Exception e) {
-                    System.out.println("Error during sync: " + e.getMessage());
-                    break;
                 }
             }
+            System.out.println("\nDatabase synchronization finished.");
         }).subscribeOn(Schedulers.boundedElastic()).subscribe();
     }
 
@@ -65,12 +96,15 @@ public class GameService {
     private void saveAndUpdateGames(List<GameDTO> gamesFetchedFromExternalApi) {
         for (GameDTO gameInfo : gamesFetchedFromExternalApi) {
             System.out.println(gameInfo.id() + " - " + gameInfo.name());
-            System.out.println(gameInfo.platforms());
-            EsrbRating esrbRating = esrbRatingService.getEsrbRating(gameInfo.esrb_rating());
-            Set<Platform> platforms = platformService.getPlatformsList(gameInfo.platforms());
+            //System.out.println(gameInfo.platforms());
+            EsrbRating esrbRating =
+                    esrbRatingService.getEsrbRating(gameInfo.esrb_rating());
+            Set<Platform> platforms =
+                    platformService.getPlatformsList(gameInfo.platforms());
             Set<Genre> genres = genreService.getGenresList(gameInfo.genres());
 
-            Game game = gameRepository.findById(gameInfo.id()).orElseGet(Game::new);
+            Game game =
+                    gameRepository.findById(gameInfo.id()).orElseGet(Game::new);
             game.setId(gameInfo.id());
             game.setSlug(gameInfo.slug());
             game.setName(gameInfo.name());
@@ -91,21 +125,21 @@ public class GameService {
 
 
     public void testSingleFetch(String initialUrl) {
-        System.out.println("----------------------------------------------------");
-        apiClient.fetchGamesPage(initialUrl, 40)
-                .subscribe(response -> {
-                            System.out.println("Response received");
-                            System.out.println("Count: " + response.count());
-                            System.out.println("Next: " + response.next());
-                            System.out.println("Previous: " + response.previous());
-                            System.out.println("Total Results: " + response.results().size());
-                            System.out.println("Results: " + response.results());
-                            long gamesWithSlug = response.results().stream().filter(game -> Objects.nonNull(game.slug())).count();
-                            System.out.println("Games with slug: " + gamesWithSlug);
-                        },
-                        error -> {
-                            System.err.println("Request error: " + error.getMessage());
-                        });
+        System.out.println(
+                "----------------------------------------------------");
+        apiClient.fetchGamesPage(null, null, null, null).subscribe(response -> {
+            System.out.println("Response received");
+            System.out.println("Count: " + response.count());
+            System.out.println("Next: " + response.next());
+            System.out.println("Previous: " + response.previous());
+            System.out.println("Total Results: " + response.results().size());
+            System.out.println("Results: " + response.results());
+            long gamesWithSlug =
+                    response.results().stream().filter(game -> Objects.nonNull(game.slug())).count();
+            System.out.println("Games with slug: " + gamesWithSlug);
+        }, error -> {
+            System.err.println("Request error: " + error.getMessage());
+        });
         System.out.println("Continue");
     }
 }

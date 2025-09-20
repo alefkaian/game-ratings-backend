@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
             this.gameService = gameService;
         }
 
-        @PostMapping("/test")
+        @PostMapping("/resync")
         public ResponseEntity<Object> testFetchGames() {
             //gameService.testSingleFetch(null);
             //return ResponseEntity.ok().build();
-            gameService.fetchAndRefreshAllGames(null);
+            gameService.fetchAndResyncAllGames(4);
             return ResponseEntity.ok().build();
         }
     }

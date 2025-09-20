@@ -3,6 +3,7 @@ package alef.gameRatingsAPI.entities.platform;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class PlatformService {
     }
 
     public Set<Platform> getPlatformsList(List<PlatformWrapperDTO> platformsInfo) {
+        if (platformsInfo == null || platformsInfo.isEmpty()) return Collections.emptySet();
         return platformsInfo.stream()
                 .map(PlatformWrapperDTO::platform)
                 .map(this::getPlatform)

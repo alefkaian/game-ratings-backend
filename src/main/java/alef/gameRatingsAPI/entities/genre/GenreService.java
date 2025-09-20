@@ -3,6 +3,7 @@ package alef.gameRatingsAPI.entities.genre;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class GenreService {
     }
 
     public Set<Genre> getGenresList(List<GenreDTO> genreInfo) {
+        if (genreInfo == null || genreInfo.isEmpty()) return Collections.emptySet();
         return genreInfo.stream()
                 .map(this::getGenre)
                 .collect(Collectors.toSet());
