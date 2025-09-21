@@ -12,10 +12,11 @@ public class EsrbRatingService {
     }
 
     @Transactional
-    public EsrbRating getEsrbRating(EsrbRatingDTO esrbRatingInfo) {
+    public EsrbRating findOrCreateEsrbRating(EsrbRatingDTO esrbRatingInfo) {
         if (esrbRatingInfo == null) return null;
         return esrbRatingRepository.findById(esrbRatingInfo.id()).orElseGet(() -> {
-            EsrbRating esrbRating = new EsrbRating(esrbRatingInfo.id(), esrbRatingInfo.slug(), esrbRatingInfo.name());
+            EsrbRating esrbRating = new EsrbRating(esrbRatingInfo.id(),
+                    esrbRatingInfo.slug(), esrbRatingInfo.name());
             return esrbRatingRepository.save(esrbRating);
         });
     }

@@ -37,17 +37,19 @@ public class Game {
     private int metacritic;
     @Column(name = "refresh_time")
     private LocalDate refreshTime;
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "esrb_rating_id")
     private EsrbRating esrbRating;
-    @ManyToMany (fetch = FetchType.LAZY)
-    @JoinTable(name = "games_platforms", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "platform_id"))
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "games_platforms", joinColumns = @JoinColumn(name =
+            "game_id"), inverseJoinColumns = @JoinColumn(name = "platform_id"))
     private Set<Platform> platforms;
-    @ManyToMany (fetch = FetchType.LAZY)
-    @JoinTable(name = "games_genres", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "games_genres", joinColumns = @JoinColumn(name =
+            "game_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private Set<Genre> genres;
 
 }

@@ -18,6 +18,6 @@ public class Publisher {
     private long id;
     private String slug;
     private String name;
-    @Column (name = "background_image")
+    @Column(name = "background_image")
     private String backgroundImage;
 }

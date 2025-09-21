@@ -6,19 +6,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-    @RequestMapping("/games")
-    public class GameController {
-        private final GameService gameService;
+@RequestMapping("/games")
+public class GameController {
+    private final GameService gameService;
 
-        public GameController(GameService gameService){
-            this.gameService = gameService;
-        }
-
-        @PostMapping("/resync")
-        public ResponseEntity<Object> testFetchGames() {
-            //gameService.testSingleFetch(null);
-            //return ResponseEntity.ok().build();
-            gameService.fetchAndResyncAllGames(4);
-            return ResponseEntity.ok().build();
-        }
+    public GameController(GameService gameService) {
+        this.gameService = gameService;
     }
+
+    @PostMapping("/resync")
+    public ResponseEntity<Object> testFetchGames() {
+        //gameService.testSingleFetch(null);
+        gameService.resyncAllGames(4);
+        return ResponseEntity.ok().build();
+    }
+}

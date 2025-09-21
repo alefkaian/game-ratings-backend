@@ -21,5 +21,5 @@ public record GameDTO(
         List<PlatformWrapperDTO> platforms,
         List<GenreDTO> genres,
         EsrbRatingDTO esrb_rating
-        ) {
+) {
 }

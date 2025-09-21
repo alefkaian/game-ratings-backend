@@ -18,9 +18,9 @@ public class Platform {
     private long id;
     private String slug;
     private String name;
-    @Column (name = "background_image")
+    @Column(name = "background_image")
     private String backgroundImage;
-    @ManyToMany (mappedBy = "platforms")
+    @ManyToMany(mappedBy = "platforms")
     private Set<Game> games;
 
     public Platform(long id, String slug, String name, String backgroundImage) {

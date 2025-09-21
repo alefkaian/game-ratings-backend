@@ -20,7 +20,10 @@ public class ExternalApiClient {
         this.apiKey = apiKey;
     }
 
-    public Mono<ExternalGamesResponseDTO> fetchGamesPage(Set<String> genres, Integer pageSize, Integer pageNumber, String ordering) {
+    public Mono<ExternalGamesResponseDTO> fetchGamesPage(Set<String> genres,
+                                                         Integer pageSize,
+                                                         Integer pageNumber,
+                                                         String ordering) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
                 .fromUriString("/games")
                 .queryParam("key", apiKey)

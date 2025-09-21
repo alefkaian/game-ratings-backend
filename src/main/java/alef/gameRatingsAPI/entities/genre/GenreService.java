@@ -17,19 +17,21 @@ public class GenreService {
     }
 
     @Transactional
-    public Genre getGenre(GenreDTO genreInfo) {
+    public Genre findOrCreateGenre(GenreDTO genreInfo) {
         if (genreInfo == null) return null;
 
         return genreRepository.findById(genreInfo.id()).orElseGet(() -> {
-            Genre genre = new Genre(genreInfo.id(), genreInfo.slug(), genreInfo.name(), genreInfo.image_background());
+            Genre genre = new Genre(genreInfo.id(), genreInfo.slug(),
+                    genreInfo.name(), genreInfo.image_background());
             return genreRepository.save(genre);
         });
     }
 
     public Set<Genre> getGenresList(List<GenreDTO> genreInfo) {
-        if (genreInfo == null || genreInfo.isEmpty()) return Collections.emptySet();
+        if (genreInfo == null || genreInfo.isEmpty())
+            return Collections.emptySet();
         return genreInfo.stream()
-                .map(this::getGenre)
+                .map(this::findOrCreateGenre)
                 .collect(Collectors.toSet());
     }
 }

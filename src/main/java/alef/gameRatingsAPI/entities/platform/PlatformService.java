@@ -17,20 +17,23 @@ public class PlatformService {
     }
 
     @Transactional
-    public Platform getPlatform(PlatformDTO platformInfo) {
+    public Platform findOrCreatePlatform(PlatformDTO platformInfo) {
         if (platformInfo == null) return null;
 
         return platformRepository.findById(platformInfo.id()).orElseGet(() -> {
-           Platform platform = new Platform(platformInfo.id(), platformInfo.slug(), platformInfo.name(), platformInfo.image_background());
-           return platformRepository.save(platform);
+            Platform platform = new Platform(platformInfo.id(),
+                    platformInfo.slug(), platformInfo.name(),
+                    platformInfo.image_background());
+            return platformRepository.save(platform);
         });
     }
 
     public Set<Platform> getPlatformsList(List<PlatformWrapperDTO> platformsInfo) {
-        if (platformsInfo == null || platformsInfo.isEmpty()) return Collections.emptySet();
+        if (platformsInfo == null || platformsInfo.isEmpty())
+            return Collections.emptySet();
         return platformsInfo.stream()
                 .map(PlatformWrapperDTO::platform)
-                .map(this::getPlatform)
+                .map(this::findOrCreatePlatform)
                 .collect(Collectors.toSet());
     }
 }

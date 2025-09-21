@@ -58,47 +58,59 @@ public class GameService {
         this.genreService = genreService;
     }
 
-    public void fetchAndResyncAllGames(int maxPages) {
+    public void resyncAllGames(int maxPages) {
         Mono.fromRunnable(() -> {
-            int currentPage;
+            System.out.println("\nDatabase synchronization started.");
             for (String genre : GENRE_SLUGS) {
-                currentPage = 1;
-                System.out.println("\nFetching from genre: " + genre);
-                while (currentPage <= maxPages) {
-                    try {
-                        System.out.println("\nCurrent page: " + currentPage);
-                        ExternalGamesResponseDTO response =
-                                apiClient.fetchGamesPage(Set.of(genre), 40,
-                                        currentPage, "-metacritic").block();
-                        if (Objects.nonNull(response) && Objects.nonNull(response.results())) {
-                            saveAndUpdateGames(response.results());
-                        }
-                        if (Objects.isNull(response) || Objects.isNull(response.next())) {
-                            break;
-                        }
-                        currentPage++;
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        System.out.println("Sync interrupted.");
-                        break;
-                    } catch (Exception e) {
-                        System.out.println("Error during sync: " + e.getMessage());
-                        break;
-                    }
-                }
+                resyncGamesFromGenre(genre, maxPages);
             }
             System.out.println("\nDatabase synchronization finished.");
         }).subscribeOn(Schedulers.boundedElastic()).subscribe();
     }
 
+    private void resyncGamesFromGenre(String genre, int maxPages) {
+        int currentPage = 1;
+        System.out.println("\nSyncing genre: " + genre);
+        while (currentPage <= maxPages) {
+            try {
+                ExternalGamesResponseDTO pageInfo =
+                        resyncGamesFromPage(genre, 40, currentPage,
+                                "-metacritic");
+                if (Objects.isNull(pageInfo) || Objects.isNull(pageInfo.next())) {
+                    break;
+                }
+                currentPage++;
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println("---- Sync interrupted. ----");
+                break;
+            } catch (Exception e) {
+                System.out.println("---- Error during sync: " + e.getMessage() + " ----");
+                break;
+            }
+        }
+    }
+
+    private ExternalGamesResponseDTO resyncGamesFromPage(String genre,
+                                                         Integer pageSize,
+                                                         Integer pageNumber,
+                                                         String ordering) {
+        System.out.println("\nSyncing page: " + pageNumber);
+        ExternalGamesResponseDTO response =
+                apiClient.fetchGamesPage(Set.of(genre), pageSize,
+                        pageNumber, ordering).block();
+        if (Objects.nonNull(response) && Objects.nonNull(response.results())) {
+            insertAndUpdateGames(response.results());
+        }
+        return response;
+    }
 
     @Transactional
-    private void saveAndUpdateGames(List<GameDTO> gamesFetchedFromExternalApi) {
-        for (GameDTO gameInfo : gamesFetchedFromExternalApi) {
+    private void insertAndUpdateGames(List<GameDTO> games) {
+        for (GameDTO gameInfo : games) {
             System.out.println(gameInfo.id() + " - " + gameInfo.name());
-            //System.out.println(gameInfo.platforms());
             EsrbRating esrbRating =
-                    esrbRatingService.getEsrbRating(gameInfo.esrb_rating());
+                    esrbRatingService.findOrCreateEsrbRating(gameInfo.esrb_rating());
             Set<Platform> platforms =
                     platformService.getPlatformsList(gameInfo.platforms());
             Set<Genre> genres = genreService.getGenresList(gameInfo.genres());
