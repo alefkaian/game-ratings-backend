@@ -3,6 +3,7 @@ package alef.gameRatingsAPI.infra.security;
 import alef.gameRatingsAPI.domain.user.LoginRequestDTO;
 import alef.gameRatingsAPI.domain.user.LoginResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
+@Tag(name = "login")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
