@@ -6,7 +6,11 @@ import alef.gameRatingsAPI.entities.genre.Genre;
 import alef.gameRatingsAPI.entities.genre.GenreService;
 import alef.gameRatingsAPI.entities.platform.Platform;
 import alef.gameRatingsAPI.entities.platform.PlatformService;
+import alef.gameRatingsAPI.shared.dto.PageDTO;
 import alef.gameRatingsAPI.shared.external.ExternalApiClient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
@@ -56,6 +60,19 @@ public class GameService {
         this.esrbRatingService = esrbRatingService;
         this.platformService = platformService;
         this.genreService = genreService;
+    }
+
+    public PageDTO<topGamesDTO> findTopGames(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Game> gamesPage = gameRepository.findTopGames(pageable);
+        List<topGamesDTO> topGamesDtoList =
+                gamesPage.stream().map(topGamesDTO::new).toList();
+        return new PageDTO<topGamesDTO>(gamesPage.getNumber(),
+                        gamesPage.getSize(),
+                        gamesPage.getTotalElements(),
+                        gamesPage.getTotalPages(),
+                        gamesPage.isLast(),
+                        topGamesDtoList);
     }
 
     public void resyncAllGames(int maxPages) {
