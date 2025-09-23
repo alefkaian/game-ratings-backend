@@ -1,12 +1,12 @@
 package alef.gameRatingsAPI.infra.security;
 
-import alef.gameRatingsAPI.domain.user.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -16,25 +16,27 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
-    private final UserRepository userRepository;
+    private final ApplicationUserDetailsService userDetailsService;
 
-    public SecurityFilter(TokenService tokenService, UserRepository userRepository) {
+    public SecurityFilter(TokenService tokenService,
+                          ApplicationUserDetailsService userDetailsService) {
         this.tokenService = tokenService;
-        this.userRepository = userRepository;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        var token = recoverToken(request);
+        String token = recoverToken(request);
         System.out.println("Received token: " + token);
         if (token != null) {
-            var validation = tokenService.validateToken(token);
+            String username = tokenService.validateToken(token);
 
-            var user = userRepository.findByUsername(validation);
+            UserDetails user =
+                    userDetailsService.loadUserByUsername(username);
 
-            var usernamePassword =
+            UsernamePasswordAuthenticationToken usernamePassword =
                     new UsernamePasswordAuthenticationToken(user, null,
                             user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(usernamePassword);
@@ -44,7 +46,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     private String recoverToken(HttpServletRequest request) {
-        var authorizationHeader = request.getHeader("Authorization");
+        String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null) return null;
         return authorizationHeader.replace("Bearer ", "");
     }
