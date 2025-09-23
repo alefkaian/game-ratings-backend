@@ -2,6 +2,7 @@ package alef.gameRatingsAPI.infra.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,14 +29,14 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> {
                     authorize
-                            //.requestMatchers(HttpMethod.POST, "/login")
-                            // .permitAll()
-                            //.requestMatchers("/swagger-ui.html", "/swagger-ui/**",
-                            //        "/v3/api-docs/**").permitAll()
-                            //.requestMatchers(HttpMethod.POST, "/games/resync")
-                            // .hasRole("ADMIN")
-                            // .anyRequest().authenticated()
-                            .anyRequest().permitAll();
+                            .requestMatchers(HttpMethod.POST, "/login")
+                            .permitAll()
+                            .requestMatchers("/swagger-ui.html", "/swagger-ui" +
+                                            "/**",
+                                    "/v3/api-docs/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/games/resync")
+                            .hasRole("ADMIN")
+                            .anyRequest().permitAll(); // redundant for now
                 })
                 .addFilterBefore(securityFilter,
                         UsernamePasswordAuthenticationFilter.class)

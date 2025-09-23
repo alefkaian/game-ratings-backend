@@ -26,7 +26,7 @@ public class TokenService {
                     .withSubject(user.getUsername())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
-        } catch (JWTCreationException exception){
+        } catch (JWTCreationException exception) {
             throw new RuntimeException("Error during token generation.",
                     exception);
         }
@@ -40,12 +40,13 @@ public class TokenService {
                     .build()
                     .verify(token)
                     .getSubject();
-        } catch (JWTVerificationException exception){
+        } catch (JWTVerificationException exception) {
             return "";
         }
     }
 
     private Instant genExpirationDate() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03" +
+                ":00"));
     }
 }
