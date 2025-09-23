@@ -13,8 +13,9 @@ public class ExternalApiClient {
     private final WebClient webClient;
     private final String apiKey;
 
-    public ExternalApiClient(WebClient.Builder builder, @Value("${base.api" +
-            ".url}") String baseUrl, @Value("${rawg.api.key}") String apiKey) {
+    public ExternalApiClient(WebClient.Builder builder, @Value("${rawg.api" +
+                                     ".base-url}") String baseUrl,
+                             @Value("${rawg.api.key}") String apiKey) {
         this.webClient = builder.baseUrl(baseUrl).build();
         this.apiKey = apiKey;
     }

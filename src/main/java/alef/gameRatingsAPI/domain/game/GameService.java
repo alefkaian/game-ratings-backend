@@ -6,9 +6,9 @@ import alef.gameRatingsAPI.domain.genre.Genre;
 import alef.gameRatingsAPI.domain.genre.GenreService;
 import alef.gameRatingsAPI.domain.platform.Platform;
 import alef.gameRatingsAPI.domain.platform.PlatformService;
-import alef.gameRatingsAPI.shared.dto.PageDTO;
 import alef.gameRatingsAPI.infra.external.api.ExternalApiClient;
 import alef.gameRatingsAPI.infra.external.api.ExternalGamesResponseDTO;
+import alef.gameRatingsAPI.shared.dto.PageDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -63,12 +63,12 @@ public class GameService {
         this.genreService = genreService;
     }
 
-    public PageDTO<topGamesDTO> findTopGames(int pageNumber, int pageSize) {
+    public PageDTO<topGamesResponseDTO> findTopGames(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Game> gamesPage = gameRepository.findTopGames(pageable);
-        List<topGamesDTO> topGamesDtoList =
-                gamesPage.stream().map(topGamesDTO::new).toList();
-        return new PageDTO<topGamesDTO>(gamesPage.getNumber(),
+        List<topGamesResponseDTO> topGamesDtoList =
+                gamesPage.stream().map(topGamesResponseDTO::new).toList();
+        return new PageDTO<topGamesResponseDTO>(gamesPage.getNumber(),
                         gamesPage.getSize(),
                         gamesPage.getTotalElements(),
                         gamesPage.getTotalPages(),

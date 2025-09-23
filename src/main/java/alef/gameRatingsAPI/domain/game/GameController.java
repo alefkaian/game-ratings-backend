@@ -14,11 +14,11 @@ public class GameController {
     }
 
     @GetMapping("/top")
-    public ResponseEntity<PageDTO<topGamesDTO>> listTopGames(
+    public ResponseEntity<PageDTO<topGamesResponseDTO>> listTopGames(
             @RequestParam(value = "page", defaultValue = "0") int pageNumber,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
-        PageDTO<topGamesDTO> games = gameService.findTopGames(pageNumber, size);
+        PageDTO<topGamesResponseDTO> games = gameService.findTopGames(pageNumber, size);
         return ResponseEntity.ok(games);
     }
 
