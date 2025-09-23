@@ -1,4 +1,6 @@
-package alef.gameRatingsAPI.entities.game;
+package alef.gameRatingsAPI.infra.external.api;
+
+import alef.gameRatingsAPI.domain.game.GameDTO;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package alef.gameRatingsAPI.entities.esrbRating;
+package alef.gameRatingsAPI.domain.esrbRating;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

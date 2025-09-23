@@ -1,4 +1,4 @@
-package alef.gameRatingsAPI.entities.esrbRating;
+package alef.gameRatingsAPI.domain.esrbRating;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,9 +1,9 @@
-package alef.gameRatingsAPI.entities.game;
+package alef.gameRatingsAPI.domain.game;
 
-import alef.gameRatingsAPI.entities.esrbRating.EsrbRating;
-import alef.gameRatingsAPI.entities.genre.Genre;
-import alef.gameRatingsAPI.entities.platform.Platform;
-import alef.gameRatingsAPI.entities.publisher.Publisher;
+import alef.gameRatingsAPI.domain.esrbRating.EsrbRating;
+import alef.gameRatingsAPI.domain.genre.Genre;
+import alef.gameRatingsAPI.domain.platform.Platform;
+import alef.gameRatingsAPI.domain.publisher.Publisher;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -1,5 +1,6 @@
-package alef.gameRatingsAPI.entities.esrbRating;
+package alef.gameRatingsAPI.domain.publisher;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -8,19 +9,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "esrb_ratings")
+@Table(name = "publishers")
 @Getter
 @Setter
 @NoArgsConstructor
-public class EsrbRating {
+public class Publisher {
     @Id
     private long id;
     private String slug;
     private String name;
-
-    public EsrbRating(long id, String slug, String name) {
-        this.id = id;
-        this.slug = slug;
-        this.name = name;
-    }
+    @Column(name = "background_image")
+    private String backgroundImage;
 }

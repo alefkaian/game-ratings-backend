@@ -1,6 +1,6 @@
-package alef.gameRatingsAPI.entities.game;
+package alef.gameRatingsAPI.domain.game;
 
-import alef.gameRatingsAPI.entities.genre.GenreNameDTO;
+import alef.gameRatingsAPI.domain.genre.GenreNameDTO;
 
 import java.time.Year;
 import java.util.Set;

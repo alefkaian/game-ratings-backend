@@ -1,4 +1,4 @@
-package alef.gameRatingsAPI.entities.platform;
+package alef.gameRatingsAPI.domain.platform;
 
 public record PlatformWrapperDTO(PlatformDTO platform) {
 }

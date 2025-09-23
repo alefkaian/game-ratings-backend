@@ -1,4 +1,4 @@
-package alef.gameRatingsAPI.entities.game;
+package alef.gameRatingsAPI.domain.game;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

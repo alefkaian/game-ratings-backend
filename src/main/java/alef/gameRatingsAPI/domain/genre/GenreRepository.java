@@ -1,4 +1,4 @@
-package alef.gameRatingsAPI.entities.genre;
+package alef.gameRatingsAPI.domain.genre;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

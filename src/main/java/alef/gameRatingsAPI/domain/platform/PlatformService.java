@@ -1,4 +1,4 @@
-package alef.gameRatingsAPI.entities.platform;
+package alef.gameRatingsAPI.domain.platform;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

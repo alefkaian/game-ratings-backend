@@ -1,18 +1,18 @@
-package alef.gameRatingsAPI.entities.genre;
+package alef.gameRatingsAPI.domain.platform;
 
-import alef.gameRatingsAPI.entities.game.Game;
+import alef.gameRatingsAPI.domain.game.Game;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
 
 @Entity
-@Table(name = "genres")
+@Table(name = "platforms")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
 @NoArgsConstructor
-public class Genre {
+public class Platform {
     @Id
     @EqualsAndHashCode.Include
     private long id;
@@ -20,10 +20,10 @@ public class Genre {
     private String name;
     @Column(name = "background_image")
     private String backgroundImage;
-    @ManyToMany(mappedBy = "genres")
+    @ManyToMany(mappedBy = "platforms")
     private Set<Game> games;
 
-    public Genre(long id, String slug, String name, String backgroundImage) {
+    public Platform(long id, String slug, String name, String backgroundImage) {
         this.id = id;
         this.slug = slug;
         this.name = name;

@@ -1,6 +1,5 @@
-package alef.gameRatingsAPI.shared.external;
+package alef.gameRatingsAPI.infra.external.api;
 
-import alef.gameRatingsAPI.entities.game.ExternalGamesResponseDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
