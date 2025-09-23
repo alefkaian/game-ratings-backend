@@ -2,6 +2,7 @@ package alef.gameRatingsAPI.infra.security;
 
 import alef.gameRatingsAPI.domain.user.LoginRequestDTO;
 import alef.gameRatingsAPI.domain.user.LoginResponseDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ public class AuthenticationController {
     }
 
     @PostMapping
+    @Operation(summary = "Login with credentials", description = "Returns a JWT token")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO credentials) {
         LoginResponseDTO response = authenticationService.login(credentials);
         return ResponseEntity.ok(response);
