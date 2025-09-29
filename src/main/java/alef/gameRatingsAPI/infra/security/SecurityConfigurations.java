@@ -34,7 +34,7 @@ public class SecurityConfigurations {
                             .requestMatchers("/swagger-ui.html", "/swagger-ui" +
                                             "/**",
                                     "/v3/api-docs/**").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/games/resync")
+                            .requestMatchers(HttpMethod.PUT, "/games/resync")
                             .hasRole("ADMIN")
                             .anyRequest().permitAll(); // redundant for now
                 })

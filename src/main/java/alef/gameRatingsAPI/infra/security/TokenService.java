@@ -41,12 +41,13 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception) {
-            return "";
+            return "Invalid or expired token";
         }
     }
 
     private Instant genExpirationDate() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03" +
+        return LocalDateTime.now().plusMinutes(5).toInstant(ZoneOffset.of(
+                "-03" +
                 ":00"));
     }
 }

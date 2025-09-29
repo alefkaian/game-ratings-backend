@@ -38,7 +38,7 @@ public class GameController {
         return ResponseEntity.ok(games);
     }
 
-    @PostMapping("/resync")
+    @PutMapping("/resync")
     @Operation(summary = "Update database",
             description = "Calls a routine to update the " +
                     "database with data fetched from RAWG API. " +
