@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -29,7 +31,9 @@ public class SecurityFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = recoverToken(request);
-        System.out.println("Received token: " + token);
+        System.out.println(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")) +  " " +
+                "Received " +
+                "token: " + token);
         if (token != null) {
             String username = tokenService.validateToken(token);
 
